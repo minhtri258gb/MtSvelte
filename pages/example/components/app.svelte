@@ -7,6 +7,8 @@
     Checkbox,
     ClickableTile,
     CodeSnippet,
+    Column,
+    Content,
     ComboBox,
     ComposedModal,
     ContentSwitcher,
@@ -17,10 +19,17 @@
     Dropdown,
     ExpandableTile,
     FileUploaderButton,
+
+    Grid,
+
+    Header, HeaderNav, HeaderNavItem, HeaderNavMenu,
     
     ModalHeader, ModalBody, ModalFooter,
 
+    Row,
     SelectItem,
+    SkipToContent,
+    SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink, SideNavDivider,
     Switch,
     TimePicker, TimePickerSelect,
     Tag,
@@ -29,6 +38,8 @@
   import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
   import Cut from "carbon-icons-svelte/lib/Cut.svelte";
   
+  let isSideNavOpen = false;
+
   let size;
   let events = [];
 
@@ -80,11 +91,53 @@
 </script>
 
 
+<Header company="IBM" platformName="Carbon Svelte" bind:isSideNavOpen>
+  <svelte:fragment slot="skip-to-content">
+    <SkipToContent />
+  </svelte:fragment>
+  <HeaderNav>
+    <HeaderNavItem href="/" text="h Link 1" />
+    <HeaderNavItem href="/" text="h Link 2" />
+    <HeaderNavItem href="/" text="h Link 3" />
+    <HeaderNavMenu text="Menu">
+      <HeaderNavItem href="/" text="sh Link 1" />
+      <HeaderNavItem href="/" text="sh Link 2" />
+      <HeaderNavItem href="/" text="sh ink 3" />
+    </HeaderNavMenu>
+  </HeaderNav>
+</Header>
+
+<SideNav bind:isOpen={isSideNavOpen}>
+  <SideNavItems>
+    <SideNavLink text="m Link 1" />
+    <SideNavLink text="m Link 2" />
+    <SideNavLink text="m Link 3" />
+    <SideNavMenu text="m Menu">
+      <SideNavMenuItem href="/" text="ms Link 1" />
+      <SideNavMenuItem href="/" text="ms Link 2" />
+      <SideNavMenuItem href="/" text="ms Link 3" />
+    </SideNavMenu>
+    <SideNavDivider />
+    <SideNavLink text="m Link 4" />
+  </SideNavItems>
+</SideNav>
+
 <Breadcrumb>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
   <BreadcrumbItem href="/reports">Example</BreadcrumbItem>
   <BreadcrumbItem href="/reports/2019" isCurrentPage>Components</BreadcrumbItem>
 </Breadcrumb>
+
+
+<Content>
+  <Grid>
+    <Row>
+      <Column>
+        <h1>Welcome</h1>
+      </Column>
+    </Row>
+  </Grid>
+</Content>
 
 
 <Accordion>

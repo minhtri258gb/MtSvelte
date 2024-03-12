@@ -30,6 +30,7 @@ FrontEnd with Svelte
 - [test](http://localhost:5173/test/)
 - [home](http://localhost:5173/home/)
 - [music](http://localhost:5173/music/)
+- [dynamic/list](http://localhost:5173/dynamic/list/?page=MGR_LIST)
 - [example/charts](http://localhost:5173/example/charts/)
 - [example/components](http://localhost:5173/example/components/)
 - [example/icons](http://localhost:5173/example/icons/)
