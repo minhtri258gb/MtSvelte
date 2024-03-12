@@ -10,7 +10,6 @@
 		ToolbarMenuItem,
 	} from "carbon-components-svelte";
 	import { Client, cacheExchange, fetchExchange } from '@urql/svelte';
-	import { Math } from 'mathjax-svelte';
 
 	const client = new Client({
 		url: 'http://localhost:3000/graphql',
@@ -76,9 +75,8 @@
 
 <div class="left">
 	<h2 class="title">Music player</h2>
-	<Math t={`E = {mc^2}`} />
-	
 </div>
+
 <div class="right">
 	<DataTable
 		headers={[

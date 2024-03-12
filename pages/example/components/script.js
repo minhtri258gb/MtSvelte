@@ -1,3 +1,4 @@
+import 'carbon-components-svelte/css/all.css'
 import './style.css'
 import App from './app.svelte'
 

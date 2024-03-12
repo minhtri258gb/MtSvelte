@@ -9,8 +9,7 @@
 		"preview": "npx vite preview"
 	},
 	"dependencies": {
-		"@urql/svelte": "^4.0.4",
-		"mathjax-svelte": "^0.0.2"
+		"@urql/svelte": "^4.0.4"
 	},
 	"devDependencies": {
 		"@carbon/charts-svelte": "^1.15.3",
