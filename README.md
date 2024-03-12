@@ -7,9 +7,11 @@ FrontEnd with Svelte
 * Run: npx vite dev
 
 # Command
-start: npx vite
-build: npx vite build  
-preview: npx vite preview  
+- start: npx vite  
+- build: npx vite build  
+- xem trước: npx vite preview  
+- Kiểm tra package có phiên bản mới: npm outdated  
+- Cập nhật package mới nhất: npm i <name_package>@latest  
 
 # Document
 

@@ -1,9 +1,18 @@
-import { resolve } from 'path'
-import { defineConfig } from 'vite'
-import { svelte } from '@sveltejs/vite-plugin-svelte'
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { defineConfig } from 'vite';
+import { optimizeImports, optimizeCss, icons } from 'carbon-preprocess-svelte';
+import { resolve } from 'path';
 
 export default defineConfig({
-	plugins: [svelte()],
+	plugins: [
+		svelte({
+			preprocess: [
+				optimizeImports(),
+				icons()
+			]
+		}),
+		process.env.NODE_ENV === 'production' && optimizeCss()
+	],
 	root: 'pages',
 	build: {
 		rollupOptions: {
