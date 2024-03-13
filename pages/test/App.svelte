@@ -1,18 +1,56 @@
 <script>
-  import {
-    TimePicker,
-    TimePickerSelect,
-    SelectItem,
-  } from "carbon-components-svelte";
+  import { DataTable } from "carbon-components-svelte";
 </script>
 
-<TimePicker labelText="Cron job" placeholder="hh:mm">
-  <TimePickerSelect value="pm">
-    <SelectItem value="am" text="AM" />
-    <SelectItem value="pm" text="PM" />
-  </TimePickerSelect>
-  <TimePickerSelect value="pdt">
-    <SelectItem value="pdt" text="PDT" />
-    <SelectItem value="gmt" text="GMT" />
-  </TimePickerSelect>
-</TimePicker>
+<DataTable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+  ]}
+  rows={[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin",
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin",
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation",
+    },
+    {
+      id: "d",
+      name: "Load Balancer 6",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin",
+    },
+    {
+      id: "e",
+      name: "Load Balancer 4",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin",
+    },
+    {
+      id: "f",
+      name: "Load Balancer 5",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation",
+    },
+  ]}
+/>
