@@ -5,43 +5,34 @@
     SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink, SideNavDivider,
     Breadcrumb, BreadcrumbItem,
     SkipToContent, Content, Grid, Row, Column,
-    Form, FormGroup,
+    Form,
+    TextInput, TextArea,
     Checkbox,
-    RadioButtonGroup, RadioButton,
-    Select, SelectItem,
     Button,
   } from 'carbon-components-svelte';
   import mt from './script.js';
-
-  // Get params URL
-  mt.init();
 
   // Menu
   let isSideNavOpen = true;
   let isOpen = false;
 
-  // DataTable
+  // Form
   let detail = { name: "Dynamic List" };
-  let headers = [];
-  let rows = [];
-  let actionTop = [];
-  let actionInline = [];
+  let fields = [];
+  let form = {};
+  let actions = [];
   
-
   // Call API get data
   onMount(async () => {
-    try {
-      let result = await mt.apiDynamicInfo(); // Call API
-      detail = result.detail;
-      // headers = result.headers;
-      // rows = result.rows;
-      actionTop = result.actionTop;
-      actionInline = result.actionInline;
-    }
-    catch (e) {
-      console.error(e)
-      alert(e);
-    }
+
+    mt.init();
+
+    let result = await mt.apiDynamicInfo(); // Call API
+    detail = result.detail;
+    fields = result.fields;
+    form = result.form;
+    actions = result.actions;
+
   });
 
 </script>
@@ -101,61 +92,27 @@
 </SideNav>
 
 <Content>
-    
+  
   <Breadcrumb>
     <BreadcrumbItem href="/">Home</BreadcrumbItem>
     <BreadcrumbItem href="/reports">Example</BreadcrumbItem>
     <BreadcrumbItem href="/reports/2019" isCurrentPage>Components</BreadcrumbItem>
   </Breadcrumb>
 
-  <Form on:submit={(e) => mt.onFormSubmit(e)} >
-    <FormGroup legendText="Checkboxes">
-      <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
-      <Checkbox id="checkbox-1" labelText="Checkbox Label" />
-      <Checkbox id="checkbox-2" labelText="Checkbox Label" disabled />
-    </FormGroup>
-    <FormGroup legendText="Radio buttons">
-      <RadioButtonGroup name="radio-button-group" selected="default-selected">
-        <RadioButton
-          id="radio-1"
-          value="standard"
-          labelText="Standard Radio Button"
-        />
-        <RadioButton
-          id="radio-2"
-          value="default-selected"
-          labelText="Default Selected Radio Button"
-        />
-        <RadioButton
-          id="radio-4"
-          value="disabled"
-          labelText="Disabled Radio Button"
-          disabled
-        />
-      </RadioButtonGroup>
-    </FormGroup>
-    <FormGroup>
-      <Select id="select-1" labelText="Select menu">
-        <SelectItem
-          disabled
-          hidden
-          value="placeholder-item"
-          text="Choose an option"
-        />
-        <SelectItem value="option-1" text="Option 1" />
-        <SelectItem value="option-2" text="Option 2" />
-        <SelectItem value="option-3" text="Option 3" />
-      </Select>
-    </FormGroup>
-    {#each actionTop as action, i}
-      {#if action.func_type === "SUBMIT"}
-        <Button type="submit">{action.name}</Button>
-      {:else}
-        <Button on:click={() => mt.onButtonPress(action)} >{action.name}</Button>
+  <Form >
+    {#each fields as field}
+      {#if field.type === "TEXT"}
+        <TextInput labelText={field.name} bind:value={form[field.code]} />
+      {:else if field.type === "TEXTAREA"}
+        <TextArea labelText={field.name} bind:value={form[field.code]} />
+      {:else if field.type === "CHECKBOX"}
+        <Checkbox id={field.code} labelText={field.name} />
       {/if}
     {/each}
+    {#each actions as action}
+      <Button on:click={() => mt.onButtonPress(action, detail, form)} >{action.name}</Button>
+    {/each}
   </Form>
-
 
   <Grid>
     <Row>

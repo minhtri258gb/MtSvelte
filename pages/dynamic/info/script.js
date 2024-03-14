@@ -2,44 +2,69 @@ import config from '@libs/config.js'
 var mt = {
   args: {}, // params on URL
 
+  // Method
   init: function() {
+
+    // Get params URL
     const urlParams = new URLSearchParams(window.location.search);
     for (const [key, value] of urlParams.entries())
       this.args[key] = value;
+
   },
   apiDynamicInfo: async function() {
-    let body = { ...this.args };
-    let response = await fetch(config.baseUrl+'api/dynamic/info', {
-      method:'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Authorization': 'Basic ' + base64.encode(username + ":" + password),
-      },
-      body: JSON.stringify(body),
-    });
-    let result = await response.json();
-    if (response.status != 200)
-      throw result;
+    try {
 
-    let actions = result.actions;
-    delete result.actions;
+      let body = { ...this.args };
+      let response = await fetch(config.baseUrl+'api/dynamic/info', {
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': 'Basic ' + base64.encode(username + ":" + password),
+        },
+        body: JSON.stringify(body),
+      });
+      let result = await response.json();
+      if (response.status != 200)
+        throw result;
   
-    // Tách actions
-    let actionTop = [];
-    let actionInline = [];
-    for (let i in actions) {
-      let action = actions[i];
-      if (action.type == 1)
-        actionTop.push(action);
-      else if (action.type == 2)
-        actionInline.push(action);
+      return result;
     }
-    result.actionTop = actionTop;
-    result.actionInline = actionInline;
-
-    return result;
+    catch (e) {
+      console.error(e)
+      alert(e);
+    }
+    return {};
   },
-  onButtonPress: function(action, record) {
+  apiDynamicInfoSave: async function(form) {
+    try {
+
+      let body = { ...form };
+      let response = await fetch(config.baseUrl+'api/dynamic/info/save', {
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': 'Basic ' + base64.encode(username + ":" + password),
+        },
+        body: JSON.stringify(body),
+      });
+      let result = await response.json();
+      if (response.status == 200) {
+        alert('Cập nhật thành công');
+      } else if (response.status == 201) {
+        alert('Dữ liệu không có sự thay đổi');
+      } else {
+        throw result;
+      }
+  
+      return result;
+    }
+    catch (e) {
+      console.error(e)
+      alert(e);
+    }
+    return {};
+  },
+  onButtonPress: function(action, detail, form) {
 
     if (action.func_type == 'LINK') {
       let url = action.func_data;
@@ -55,23 +80,21 @@ var mt = {
         let varName = url.substring(posb+1, pose);
         if (varName.length == 0)
           { console.error("Cấu hình lỗi: Ko có tên biến giữa { và } :", action.func_data); return; }
-        if (record[varName] == null)
+        if (form[varName] == null)
           { console.error("Cấu hình lỗi: Tên biến ko tồn tại:", varName); return; }
-        url = url.replace("{"+varName+"}", record[varName]);
+        url = url.replace("{"+varName+"}", form[varName]);
       }
 
       // Go to url
-      // console.log("url:", url);
       window.location.href = '/dynamic/' + url;
     }
-    else if (action.func_type == 'SUBMIT') { /* do nothing */ }
+    else if (action.func_type == 'SUBMIT') {
+      form.table = detail.table; // Trường bổ sung cho form
+      this.apiDynamicInfoSave(form);
+    }
     else { // More action
       console.log("Action: func_type invail:", action.func_type);
     }
-  },
-  onFormSubmit: function(e) {
-    e.preventDefault();
-    console.log(e);
   },
 };
 mt.config = config;
