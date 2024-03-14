@@ -1,29 +1,19 @@
 import config from '@libs/config.js'
 var mt = {
-  args: {}, // params on URL
-
-  init: function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    for (const [key, value] of urlParams.entries())
-      this.args[key] = value;
-  },
-  apiDynamicList: async function() {
-    let body = { ...this.args };
-    let response = await fetch(config.baseUrl+'api/dynamic/list', {
+  apiDynamicInfo: async function(pageCode, recordCode) {
+    let response = await fetch(config.baseUrl+'dynamic/info/'+pageCode, {
       method:'POST',
       headers: {
         'Content-Type': 'application/json',
         // 'Authorization': 'Basic ' + base64.encode(username + ":" + password),
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        code: recordCode,
+      }),
     });
     let result = await response.json();
     if (response.status != 200)
       throw result;
-
-    // Nếu có actions thì thêm cột
-    if (result.actions.length > 0)
-      result.headers.push({ key: "overflow", empty: true });
 
     return result;
   },
@@ -51,7 +41,8 @@ var mt = {
       // Go to url
       // console.log("url:", url);
       window.location.href = '/dynamic/' + url;
-    } else {
+    }
+    else { // More action
       console.log("Action: func_type invail:", action.func_type);
     }
   },

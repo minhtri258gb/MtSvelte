@@ -1,5 +1,4 @@
-const mtConfig = {
+const config = {
 	baseUrl: 'http://localhost/',
 }
-
-export default mtConfig
+export default config

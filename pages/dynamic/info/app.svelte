@@ -13,7 +13,11 @@
   import mt from './script.js';
 
   // Get params URL
-  mt.init();
+  const urlParams = new URLSearchParams(window.location.search);
+  let page = urlParams.get('page');
+  let record = urlParams.get('record');
+
+  // record null nếu ko có
 
   // Menu
   let isSideNavOpen = true;
@@ -31,18 +35,13 @@
   // Call API get data
   onMount(async () => {
     try {
-      let result = await mt.apiDynamicList(); // Call API
+      let result = await mt.apiDynamicInfo(page, record); // Call API
       detail = result.detail;
-      headers = result.headers;
-      rows = result.rows;
+      // headers = result.headers;
+      // rows = result.rows;
       actions = result.actions;
-
-      if (headers.length == 0) {
-        alert("Thiếu cấu hình cột");
-      }
     } catch (e) {
       console.error(e)
-      alert(e);
     }
   });
 

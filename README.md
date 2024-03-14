@@ -34,3 +34,4 @@ FrontEnd with Svelte
 - [example/charts](http://localhost:5173/example/charts/)
 - [example/components](http://localhost:5173/example/components/)
 - [example/icons](http://localhost:5173/example/icons/)
+

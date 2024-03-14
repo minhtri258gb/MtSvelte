@@ -14,6 +14,7 @@ export default defineConfig({
 		process.env.NODE_ENV === 'production' && optimizeCss()
 	],
 	root: 'pages',
+	publicDir: '../public',
 	build: {
 		rollupOptions: {
 			input: {
@@ -33,9 +34,11 @@ export default defineConfig({
 		chunkSizeWarningLimit: 1024,
 	},
 	mode: 'development', // production
-	// resolve: {
-	// 	alias: ,
-	// },
+	resolve: {
+		alias: {
+			'@libs': `${resolve(__dirname, 'libs')}/`
+		},
+	},
 	// optimizeDeps: {
 	//   // exclude: ['@urql/svelte'],
 	//   // entries: [],
