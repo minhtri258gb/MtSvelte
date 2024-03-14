@@ -5,43 +5,42 @@
     SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink, SideNavDivider,
     Breadcrumb, BreadcrumbItem,
     SkipToContent, Content, Grid, Row, Column,
-    DataTable,
-    Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem,
-    OverflowMenu, OverflowMenuItem,
+    Form, FormGroup,
+    Checkbox,
+    RadioButtonGroup, RadioButton,
+    Select, SelectItem,
     Button,
   } from 'carbon-components-svelte';
   import mt from './script.js';
 
   // Get params URL
-  const urlParams = new URLSearchParams(window.location.search);
-  let page = urlParams.get('page');
-  let record = urlParams.get('record');
-
-  // record null nếu ko có
+  mt.init();
 
   // Menu
   let isSideNavOpen = true;
   let isOpen = false;
 
   // DataTable
-  let detail = {
-    name: "Dynamic List"
-  };
+  let detail = { name: "Dynamic List" };
   let headers = [];
   let rows = [];
-  let actions = [];
+  let actionTop = [];
+  let actionInline = [];
   
 
   // Call API get data
   onMount(async () => {
     try {
-      let result = await mt.apiDynamicInfo(page, record); // Call API
+      let result = await mt.apiDynamicInfo(); // Call API
       detail = result.detail;
       // headers = result.headers;
       // rows = result.rows;
-      actions = result.actions;
-    } catch (e) {
+      actionTop = result.actionTop;
+      actionInline = result.actionInline;
+    }
+    catch (e) {
       console.error(e)
+      alert(e);
     }
   });
 
@@ -109,43 +108,53 @@
     <BreadcrumbItem href="/reports/2019" isCurrentPage>Components</BreadcrumbItem>
   </Breadcrumb>
 
-  <DataTable
-    title={detail.name}
-    headers={headers}
-    rows={rows}
-    size="medium"
-  >
-    <!-- Top Action -->
-    <Toolbar>
-      <ToolbarContent>
-        <ToolbarSearch />
-        <ToolbarMenu>
-          <ToolbarMenuItem primaryFocus>Restart all</ToolbarMenuItem>
-          <ToolbarMenuItem href="https://cloud.ibm.com/docs/loadbalancer-service">
-            API documentation
-          </ToolbarMenuItem>
-          <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
-        </ToolbarMenu>
-        {#each actions as action, i}
-          {#if action.type == 1}
-          <Button on:click={() => mt.onButtonPress(actions[i])} >{action.name}</Button>
-          {/if}
-        {/each}
-      </ToolbarContent>
-    </Toolbar>
-    <!-- Row Action -->
-    <svelte:fragment slot="cell" let:cell let:row>
-      {#if cell.key === "overflow"}
-        <OverflowMenu flipped>
-          {#each actions as action, i}
-            {#if action.type == 2}
-              <OverflowMenuItem text={action.name} on:click={() => mt.onButtonPress(actions[i], row)} />
-            {/if}
-          {/each}
-        </OverflowMenu>
-      {:else}{cell.value}{/if}
-    </svelte:fragment>
-  </DataTable>
+  <Form on:submit={(e) => mt.onFormSubmit(e)} >
+    <FormGroup legendText="Checkboxes">
+      <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
+      <Checkbox id="checkbox-1" labelText="Checkbox Label" />
+      <Checkbox id="checkbox-2" labelText="Checkbox Label" disabled />
+    </FormGroup>
+    <FormGroup legendText="Radio buttons">
+      <RadioButtonGroup name="radio-button-group" selected="default-selected">
+        <RadioButton
+          id="radio-1"
+          value="standard"
+          labelText="Standard Radio Button"
+        />
+        <RadioButton
+          id="radio-2"
+          value="default-selected"
+          labelText="Default Selected Radio Button"
+        />
+        <RadioButton
+          id="radio-4"
+          value="disabled"
+          labelText="Disabled Radio Button"
+          disabled
+        />
+      </RadioButtonGroup>
+    </FormGroup>
+    <FormGroup>
+      <Select id="select-1" labelText="Select menu">
+        <SelectItem
+          disabled
+          hidden
+          value="placeholder-item"
+          text="Choose an option"
+        />
+        <SelectItem value="option-1" text="Option 1" />
+        <SelectItem value="option-2" text="Option 2" />
+        <SelectItem value="option-3" text="Option 3" />
+      </Select>
+    </FormGroup>
+    {#each actionTop as action, i}
+      {#if action.func_type === "SUBMIT"}
+        <Button type="submit">{action.name}</Button>
+      {:else}
+        <Button on:click={() => mt.onButtonPress(action)} >{action.name}</Button>
+      {/if}
+    {/each}
+  </Form>
 
 
   <Grid>

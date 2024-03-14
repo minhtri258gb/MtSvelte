@@ -21,9 +21,34 @@ var mt = {
     if (response.status != 200)
       throw result;
 
-    // Nếu có actions thì thêm cột
-    if (result.actions.length > 0)
-      result.headers.push({ key: "overflow", empty: true });
+    let actions = result.actions;
+    delete result.actions;
+
+    // Preprocess actions
+    let actionTop = [];
+    let actionInline = [];
+    for (let i in actions) {
+      let action = actions[i];
+      if (action.type == 1)
+        actionTop.push(action);
+      else if (action.type == 2)
+        actionInline.push(action);
+    }
+    result.actionTop = actionTop;
+    result.actionInline = actionInline;
+
+    // Preprocess headers
+    if (result.headers.length == 0) // Cảnh báo cấu hình lỗi
+      alert("Thiếu cấu hình cột");
+    else {
+      result.headers.unshift({ key: "stt", value: "STT" });
+      if (actionInline.length > 0) // Nếu có actionInline thì thêm cột
+        result.headers.push({ key: "overflow", empty: true });
+    }
+
+    // Preprocess rows
+    for (let i in result.rows)
+      result.rows[i].stt = i;
 
     return result;
   },

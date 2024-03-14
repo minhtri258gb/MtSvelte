@@ -20,12 +20,11 @@
   let isOpen = false;
 
   // DataTable
-  let detail = {
-    name: "Dynamic List"
-  };
+  let detail = { name: "Dynamic List" };
   let headers = [];
   let rows = [];
-  let actions = [];
+  let actionTop = [];
+  let actionInline = [];
   
 
   // Call API get data
@@ -35,12 +34,10 @@
       detail = result.detail;
       headers = result.headers;
       rows = result.rows;
-      actions = result.actions;
-
-      if (headers.length == 0) {
-        alert("Thiếu cấu hình cột");
-      }
-    } catch (e) {
+      actionTop = result.actionTop;
+      actionInline = result.actionInline;
+    }
+    catch (e) {
       console.error(e)
       alert(e);
     }
@@ -103,7 +100,7 @@
 </SideNav>
 
 <Content>
-    
+  
   <Breadcrumb>
     <BreadcrumbItem href="/">Home</BreadcrumbItem>
     <BreadcrumbItem href="/reports">Example</BreadcrumbItem>
@@ -127,10 +124,8 @@
           </ToolbarMenuItem>
           <ToolbarMenuItem hasDivider danger>Stop all</ToolbarMenuItem>
         </ToolbarMenu>
-        {#each actions as action, i}
-          {#if action.type == 1}
-          <Button on:click={() => mt.onButtonPress(actions[i])} >{action.name}</Button>
-          {/if}
+        {#each actionTop as action, i}
+          <Button on:click={() => mt.onButtonPress(action)} >{action.name}</Button>
         {/each}
       </ToolbarContent>
     </Toolbar>
@@ -138,16 +133,13 @@
     <svelte:fragment slot="cell" let:cell let:row>
       {#if cell.key === "overflow"}
         <OverflowMenu flipped>
-          {#each actions as action, i}
-            {#if action.type == 2}
-              <OverflowMenuItem text={action.name} on:click={() => mt.onButtonPress(actions[i], row)} />
-            {/if}
+          {#each actionInline as action, i}
+            <OverflowMenuItem text={action.name} on:click={() => mt.onButtonPress(action, row)} />
           {/each}
         </OverflowMenu>
       {:else}{cell.value}{/if}
     </svelte:fragment>
   </DataTable>
-
 
   <Grid>
     <Row>

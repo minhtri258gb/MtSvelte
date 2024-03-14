@@ -1,19 +1,41 @@
 import config from '@libs/config.js'
 var mt = {
-  apiDynamicInfo: async function(pageCode, recordCode) {
-    let response = await fetch(config.baseUrl+'dynamic/info/'+pageCode, {
+  args: {}, // params on URL
+
+  init: function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    for (const [key, value] of urlParams.entries())
+      this.args[key] = value;
+  },
+  apiDynamicInfo: async function() {
+    let body = { ...this.args };
+    let response = await fetch(config.baseUrl+'api/dynamic/info', {
       method:'POST',
       headers: {
         'Content-Type': 'application/json',
         // 'Authorization': 'Basic ' + base64.encode(username + ":" + password),
       },
-      body: JSON.stringify({
-        code: recordCode,
-      }),
+      body: JSON.stringify(body),
     });
     let result = await response.json();
     if (response.status != 200)
       throw result;
+
+    let actions = result.actions;
+    delete result.actions;
+  
+    // Tách actions
+    let actionTop = [];
+    let actionInline = [];
+    for (let i in actions) {
+      let action = actions[i];
+      if (action.type == 1)
+        actionTop.push(action);
+      else if (action.type == 2)
+        actionInline.push(action);
+    }
+    result.actionTop = actionTop;
+    result.actionInline = actionInline;
 
     return result;
   },
@@ -42,9 +64,14 @@ var mt = {
       // console.log("url:", url);
       window.location.href = '/dynamic/' + url;
     }
+    else if (action.func_type == 'SUBMIT') { /* do nothing */ }
     else { // More action
       console.log("Action: func_type invail:", action.func_type);
     }
+  },
+  onFormSubmit: function(e) {
+    e.preventDefault();
+    console.log(e);
   },
 };
 mt.config = config;
