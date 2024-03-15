@@ -27,6 +27,30 @@ var mt = {
       if (response.status != 200)
         throw result;
   
+      if (result.fields.length == 0) // Cảnh báo cấu hình lỗi
+        alert("Thiếu cấu hình trường");
+      else {
+        
+        for (let i in result.fields) {
+          let field = result.fields[i];
+
+          if (field.type == 'SELECTBOX' && (field.content == null || result.contents[field.content] == null)) {
+            alert("Thiếu cấu hình content");
+            console.log("[ERROR] field:", field)
+            return result;
+          }
+
+
+          // Mark content into field
+          if (field.content != null) {
+            field.content = result.contents[field.content];
+          }
+        }
+      }
+
+      // Remove content
+      delete result.contents;
+
       return result;
     }
     catch (e) {

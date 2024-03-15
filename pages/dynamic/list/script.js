@@ -48,8 +48,9 @@ var mt = {
 
     // Preprocess rows
     for (let i in result.rows)
-      result.rows[i].stt = i;
+      result.rows[i].stt = +i+1;
 
+    // Return
     return result;
   },
   onButtonPress: function(action, record) {
@@ -72,6 +73,11 @@ var mt = {
           { console.error("Cấu hình lỗi: Tên biến ko tồn tại:", varName); return; }
         url = url.replace("{"+varName+"}", record[varName]);
       }
+
+      // Bổ sung các biến url có sẵn
+      // for (let i in this.args) {
+      //   url +=
+      // }
 
       // Go to url
       // console.log("url:", url);

@@ -6,8 +6,9 @@
     Breadcrumb, BreadcrumbItem,
     SkipToContent, Content, Grid, Row, Column,
     Form,
-    TextInput, TextArea,
+    TextInput, TextArea, NumberInput,
     Checkbox,
+    Select, SelectItem,
     Button,
   } from 'carbon-components-svelte';
   import mt from './script.js';
@@ -100,15 +101,25 @@
   </Breadcrumb>
 
   <Form >
+    <!-- FIELD -->
     {#each fields as field}
       {#if field.type === "TEXT"}
         <TextInput labelText={field.name} bind:value={form[field.code]} />
       {:else if field.type === "TEXTAREA"}
         <TextArea labelText={field.name} bind:value={form[field.code]} />
+      {:else if field.type === "NUMBER"}
+        <NumberInput label={field.name} bind:value={form[field.code]} allowEmpty />
       {:else if field.type === "CHECKBOX"}
         <Checkbox id={field.code} labelText={field.name} />
+      {:else if field.type === "SELECTBOX"}
+        <Select labelText={field.name} bind:selected={form[field.code]}>
+          {#each field.content as content}
+            <SelectItem value={content.key} text={content.value} />
+          {/each}
+        </Select>
       {/if}
     {/each}
+    <!-- ACTION -->
     {#each actions as action}
       <Button on:click={() => mt.onButtonPress(action, detail, form)} >{action.name}</Button>
     {/each}
