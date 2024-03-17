@@ -1,14 +1,22 @@
-import config from '@libs/config.js'
-var mt = {
-  args: {}, // params on URL
+import config from '@libs/config.js';
 
-  init: function() {
+export default class MtList {
+  
+  constructor() {
+
+    // Add Config
+    this.config = config;
+
+    // Load param URL
+    this.args = {};
     const urlParams = new URLSearchParams(window.location.search);
     for (const [key, value] of urlParams.entries())
       this.args[key] = value;
-  },
-  apiDynamicList: async function() {
+  }
+
+  async loadPage(code) {
     let body = { ...this.args };
+    body.code = code;
     let response = await fetch(config.baseUrl+'api/dynamic/getList', {
       method: 'POST',
       headers: {
@@ -52,8 +60,9 @@ var mt = {
 
     // Return
     return result;
-  },
-  onButtonPress: function(action, record) {
+  }
+
+  onAction(action, record) {
 
     if (action.func_type == 'LINK') {
       let isBackAction = (action.code == 'BACK'); // Special
@@ -97,7 +106,6 @@ var mt = {
     else {
       console.log("Action: func_type invail:", action.func_type);
     }
-  },
-};
-mt.config = config;
-export default mt
+  }
+
+}

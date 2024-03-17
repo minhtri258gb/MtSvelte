@@ -32,6 +32,7 @@
     SideNav, SideNavItems, SideNavMenu, SideNavMenuItem, SideNavLink, SideNavDivider,
     Switch,
     TimePicker, TimePickerSelect,
+    Tabs, Tab, TabContent,
     Tag,
     TreeView,
   } from 'carbon-components-svelte'
@@ -354,6 +355,16 @@
   </TimePickerSelect>
 </TimePicker>
 
+<Tabs>
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
 
 <Tag>IBM Cloud</Tag>
 

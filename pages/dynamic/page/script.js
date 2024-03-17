@@ -1,59 +1,47 @@
-import config from '@libs/config.js'
-var mt = {
-  args: {}, // params on URL
+import config from '@libs/config.js';
 
-  init: function() {
+export default class Mt {
+
+  constructor() {
+
+    // Add Config
+    this.config = config;
+
+    // params on URL
+    this.args = {};
     const urlParams = new URLSearchParams(window.location.search);
     for (const [key, value] of urlParams.entries())
       this.args[key] = value;
-  },
-  apiDynamicList: async function() {
-    let body = { ...this.args };
-    let response = await fetch(config.baseUrl+'api/dynamic/getList', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Authorization': 'Basic ' + base64.encode(username + ":" + password),
-      },
-      body: JSON.stringify(body),
-    });
-    let result = await response.json();
-    if (response.status != 200)
-      throw result;
+  }
 
-    let actions = result.actions;
-    delete result.actions;
+  async loadPage() {
+    try {
 
-    // Preprocess actions
-    let actionTop = [];
-    let actionInline = [];
-    for (let i in actions) {
-      let action = actions[i];
-      if (action.type == 1)
-        actionTop.push(action);
-      else if (action.type == 2)
-        actionInline.push(action);
+      let result = {};
+
+      // Call API Load menu
+      let response = await fetch(config.baseUrl+'api/dynamic/getMenu', {
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': 'Basic ' + base64.encode(username + ":" + password),
+        }
+      });
+      let res = await response.json();
+      if (response.status != 200) {
+        alert(res.message)
+      } else result = Object.assign(result, res);
+
+      return result;
     }
-    result.actionTop = actionTop;
-    result.actionInline = actionInline;
-
-    // Preprocess headers
-    if (result.headers.length == 0) // Cảnh báo cấu hình lỗi
-      alert("Thiếu cấu hình cột");
-    else {
-      result.headers.unshift({ key: "stt", value: "STT" });
-      if (actionInline.length > 0) // Nếu có actionInline thì thêm cột
-        result.headers.push({ key: "overflow", empty: true });
+    catch (e) {
+      console.error(e.message)
+      alert(e);
+      return {};
     }
+  }
 
-    // Preprocess rows
-    for (let i in result.rows)
-      result.rows[i].stt = +i+1;
-
-    // Return
-    return result;
-  },
-  onButtonPress: function(action, record) {
+  onButtonPress(action, record) {
 
     if (action.func_type == 'LINK') {
       let isBackAction = (action.code == 'BACK'); // Special
@@ -97,7 +85,6 @@ var mt = {
     else {
       console.log("Action: func_type invail:", action.func_type);
     }
-  },
-};
-mt.config = config;
-export default mt
+  }
+
+}

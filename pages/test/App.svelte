@@ -1,5 +1,8 @@
 <script>
-  import { DataTable } from "carbon-components-svelte";
+  import {
+    DataTable,
+    ToastNotification,
+  } from 'carbon-components-svelte';
 </script>
 
 <DataTable
@@ -53,4 +56,10 @@
       rule: "DNS delegation",
     },
   ]}
+/>
+
+<ToastNotification
+  title="Error"
+  subtitle="An internal server error occurred."
+  caption={new Date().toLocaleString()}
 />

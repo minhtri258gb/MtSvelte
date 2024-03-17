@@ -36,6 +36,7 @@ export default defineConfig({
 	mode: 'development', // production
 	resolve: {
 		alias: {
+			'@page': `${resolve(__dirname, 'pages')}/`,
 			'@libs': `${resolve(__dirname, 'libs')}/`
 		},
 	},

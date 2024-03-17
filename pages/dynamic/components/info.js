@@ -1,17 +1,22 @@
-import config from '@libs/config.js'
-var mt = {
-  args: {}, // params on URL
+import config from '@libs/config.js';
+
+export default class MtInfo {
 
   // Method
-  init: function() {
+  constructor() {
 
-    // Get params URL
+    // Add Config
+    this.config = config;
+
+    // Load param URL
+    this.args = {};
     const urlParams = new URLSearchParams(window.location.search);
     for (const [key, value] of urlParams.entries())
       this.args[key] = value;
 
-  },
-  apiDynamicInfo: async function() {
+  }
+
+  async loadPage() {
     try {
 
       let body = { ...this.args };
@@ -58,8 +63,9 @@ var mt = {
       alert(e);
     }
     return {};
-  },
-  apiDynamicInfoSave: async function(form) {
+  }
+  
+  async apiDynamicInfoSave(form) {
     try {
       // console.log("form:", form) // #DEBUG
       let body = { ...form };
@@ -92,8 +98,9 @@ var mt = {
       alert(e);
     }
     return {};
-  },
-  onButtonPress: function(action, detail, form) {
+  }
+
+  onAction(action, detail, form) {
 
     if (action.func_type == 'LINK') {
       let isBackAction = (action.code == 'BACK'); // Special
@@ -141,7 +148,6 @@ var mt = {
     else { // More action
       console.log("Action: func_type invail:", action.func_type);
     }
-  },
-};
-mt.config = config;
-export default mt
+  }
+
+}
