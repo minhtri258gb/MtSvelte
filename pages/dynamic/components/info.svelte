@@ -10,25 +10,20 @@
   } from 'carbon-components-svelte';
   import MtInfo from './info.js';
 
-  export let code;
-
-  let self = new MtInfo();
-  let detail = {};
-  let fields = [];
-  let form = {};
-  let actions = [];
+  export let self = new MtInfo();
+  export let detail = {};
+  export let fields = [];
+  export let form = {};
+  export let actions = [];
+  export let contents = [];
   
   onMount(async () => {
     try {
-      let result = await self.loadPage(code); // Call API
-      detail = result.detail;
+      let result = self.processData(detail, fields, form, actions, contents);
       fields = result.fields;
-      form = result.form;
-      actions = result.actions;
     }
     catch (e) {
       console.error(e)
-      alert(e);
     }
   });
   

@@ -20,12 +20,14 @@ export default class Mt {
       let result = {};
 
       // Call API Load menu
-      let response = await fetch(config.baseUrl+'api/dynamic/getMenu', {
+      let body = { ...this.args };
+      let response = await fetch(config.baseUrl+'/api/dynamic/getPage', {
         method:'POST',
         headers: {
           'Content-Type': 'application/json',
           // 'Authorization': 'Basic ' + base64.encode(username + ":" + password),
-        }
+        },
+        body: JSON.stringify(body),
       });
       let res = await response.json();
       if (response.status != 200) {

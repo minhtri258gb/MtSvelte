@@ -20,7 +20,7 @@ export default class MtInfo {
     try {
 
       let body = { ...this.args };
-      let response = await fetch(config.baseUrl+'api/dynamic/getInfo', {
+      let response = await fetch(config.baseUrl+'/api/dynamic/getInfo', {
         method:'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,6 +63,31 @@ export default class MtInfo {
       alert(e);
     }
     return {};
+  }
+
+  processData(detail, fields, form, actions, contents) {
+
+    let result = {};
+    
+    if (fields.length > 0) { // Cảnh báo cấu hình lỗi
+      for (let i in fields) {
+        let field = fields[i];
+
+        if (field.type == 'SELECTBOX' && (field.content == null || result.contents[field.content] == null)) {
+          alert("Thiếu cấu hình content");
+          console.log("[ERROR] field:", field)
+          return result;
+        }
+
+        // Mark content into field
+        if (field.content != null) {
+          field.content = result.contents[field.content];
+        }
+      }
+    }
+    result.fields = fields;
+
+    return result;
   }
   
   async apiDynamicInfoSave(form) {

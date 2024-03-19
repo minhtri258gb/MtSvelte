@@ -8,30 +8,27 @@
   } from 'carbon-components-svelte';
   import MtList from './list.js';
 
-  export let code;
-
+  export let detail = {};
+  export let filters = [];
+  export let headers = [];
+  export let rows = [];
+  export let actions = [];
+  
   let self = new MtList();
-  let detail = {};
-  let headers = [];
-  let rows = [];
   let actionTop = [];
   let actionInline = [];
 
   onMount(async () => {
     try {
-      let result = await self.loadPage(code); // Call API
-      detail = result.detail;
-      headers = result.headers;
-      rows = result.rows;
+      let result = self.processData(detail, headers, rows, actions);
       actionTop = result.actionTop;
       actionInline = result.actionInline;
     }
     catch (e) {
       console.error(e)
-      alert(e);
     }
   });
-
+  
 </script>
 
 <DataTable

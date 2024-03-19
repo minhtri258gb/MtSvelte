@@ -17,7 +17,7 @@ export default class MtList {
   async loadPage(code) {
     let body = { ...this.args };
     body.code = code;
-    let response = await fetch(config.baseUrl+'api/dynamic/getList', {
+    let response = await fetch(config.baseUrl+'/api/dynamic/getList', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,6 +59,39 @@ export default class MtList {
       result.rows[i].stt = +i+1;
 
     // Return
+    return result;
+  }
+
+  processData(detail, headers, rows, actions) {
+    
+    let result = {};
+
+    // Preprocess actions
+    let actionTop = [];
+    let actionInline = [];
+    for (let i in actions) {
+      let action = actions[i];
+      if (action.type == 1)
+        actionTop.push(action);
+      else if (action.type == 2)
+        actionInline.push(action);
+    }
+    result.actionTop = actionTop;
+    result.actionInline = actionInline;
+
+    // Preprocess headers
+    if (headers.length > 0) { // Cảnh báo cấu hình lỗi
+      headers.unshift({ key: "stt", value: "STT" });
+      if (actionInline.length > 0) // Nếu có actionInline thì thêm cột
+        headers.push({ key: "overflow", empty: true });
+    }
+    result.headers = headers;
+
+    // Preprocess rows
+    for (let i in rows)
+      rows[i].stt = +i+1;
+    result.rows = rows;
+
     return result;
   }
 

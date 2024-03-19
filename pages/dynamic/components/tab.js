@@ -1,13 +1,20 @@
 import config from '@libs/config.js'
-var mt = {
-  args: {}, // params on URL
 
-  init: function() {
+export default class MtTab {
+
+  constructor() {
+
+    // Add Config
+    this.config = config;
+
+    // Load param URL
+    this.args = {};
     const urlParams = new URLSearchParams(window.location.search);
     for (const [key, value] of urlParams.entries())
       this.args[key] = value;
-  },
-  apiLoad: async function() {
+  }
+
+  async apiLoad() {
     try {
       let body = { ...this.args };
       let response = await fetch(config.baseUrl+'api/dynamic/getTab', {
@@ -31,8 +38,9 @@ var mt = {
       console.error(e)
       alert(e);
     }
-  },
-  onButtonPress: function(action, record) {
+  }
+
+  onButtonPress(action, record) {
 
     if (action.func_type == 'LINK') {
       let isBackAction = (action.code == 'BACK'); // Special
@@ -76,7 +84,6 @@ var mt = {
     else {
       console.log("Action: func_type invail:", action.func_type);
     }
-  },
-};
-mt.config = config;
-export default mt
+  }
+  
+}
