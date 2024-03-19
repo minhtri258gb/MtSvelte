@@ -1,11 +1,8 @@
-import config from '@libs/config.js';
+import MtDynamic from '../dynamic';
 
 export default class MtList {
   
   constructor() {
-
-    // Add Config
-    this.config = config;
 
     // Load param URL
     this.args = {};
@@ -14,9 +11,12 @@ export default class MtList {
       this.args[key] = value;
   }
 
-  async loadPage(code) {
+  async loadPage(id, code) {
+
     let body = { ...this.args };
+    body.id = id;
     body.code = code;
+
     let response = await fetch(config.baseUrl+'/api/dynamic/getList', {
       method: 'POST',
       headers: {
@@ -62,7 +62,7 @@ export default class MtList {
     return result;
   }
 
-  processData(detail, headers, rows, actions) {
+  processData(page, headers, rows, actions) {
     
     let result = {};
 
@@ -95,49 +95,17 @@ export default class MtList {
     return result;
   }
 
-  onAction(action, record) {
-
-    if (action.func_type == 'LINK') {
-      let isBackAction = (action.code == 'BACK'); // Special
-      let url = action.func_data;
-      if (isBackAction && url == null) {
-        history.back()
-        return
-      }
-
-      // Lấy các biến của "row" thay thế cho "func_data"
-      while(true) {
-        let posb = url.indexOf('{');
-        if (posb == -1) // ko tìm thấy biến nào nữa
-          break;
-        let pose = url.indexOf('}');
-        if (pose == -1)
-          { console.error("Cấu hình lỗi: Dấu { và } ko cùng số lượng:", action.func_data); return; }
-        let varName = url.substring(posb+1, pose);
-        if (varName.length == 0)
-          { console.error("Cấu hình lỗi: Ko có tên biến giữa { và } :", action.func_data); return; }
-        if (record[varName] == null)
-          { console.error("Cấu hình lỗi: Tên biến ko tồn tại:", varName); return; }
-        url = url.replace("{"+varName+"}", record[varName]);
-      }
-
-      // Bổ sung url params
-      if (!isBackAction) { // Nút back ko lấy biến url
-        let args = this.args;
-        let urlSplit = url.split('?')
-        if (urlSplit.length > 0) {
-          const urlParams = new URLSearchParams(urlSplit[1]);
-          for (const [key, value] of urlParams.entries())
-            args[key] = value;
-        }
-        url = urlSplit[0] + '?' + (new URLSearchParams(args).toString());
-      }
-
-      // Go to url
-      window.location.href = '/dynamic/' + url;
-    }
-    else {
-      console.log("Action: func_type invail:", action.func_type);
+  onAction(action, row) {
+    switch (action.funcType) {
+      case 'GO':
+        MtDynamic.doActionGo(action.funcData, row, this.args);
+        break;
+      case 'BACK':
+        MtDynamic.doActionBack();
+        break;
+      default:
+        console.log("Action: func_type invail:", action.funcType);
+        break;
     }
   }
 

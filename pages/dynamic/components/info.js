@@ -5,9 +5,6 @@ export default class MtInfo {
   // Method
   constructor() {
 
-    // Add Config
-    this.config = config;
-
     // Load param URL
     this.args = {};
     const urlParams = new URLSearchParams(window.location.search);
@@ -65,7 +62,7 @@ export default class MtInfo {
     return {};
   }
 
-  processData(detail, fields, form, actions, contents) {
+  processData(page, fields, form, actions, contents) {
 
     let result = {};
     

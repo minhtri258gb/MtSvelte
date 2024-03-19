@@ -7,9 +7,11 @@
   import MtInfo from '@page/dynamic/components/info.svelte'
   import MtTab from './tab.js';
 
-  export let detail;
+  export let page;
   export let tabs;
   
+  let isLoaded = false;
+
   let listDetail = {};
   let filters = [];
   let headers = [];
@@ -34,6 +36,7 @@
         filters = tab.filters;
         headers = tab.headers;
         rows = tab.rows;
+        actions = tab.actions;
       }
       else if (pageType == 'INFO') {
         
@@ -44,23 +47,29 @@
     // menus = result.menus;
     // detail = result.detail;
     // tabs = result.tabs;
+
+    isLoaded = true;
   });
 
 </script>
 
 <Tabs>
-  {#each tabs as tab}
-    <Tab label={tab.name} />
+  {#each tabs as tab, i}
+    <Tab label={tab.name} on:click={() => self.onChangeTab(tab)} />
   {/each}
   <svelte:fragment slot="content">
-    {#each tabs as tab}
-      <TabContent>
-        {#if tab.pageType == 'LIST'}
-          <MtList bind:detail={listDetail} bind:filters bind:headers bind:rows bind:actions />
-        {:else if tab.pageType == 'INFO'}
-          <MtInfo bind:detail={infoDetail} bind:fields bind:form bind:actions bind:contents />
-        {/if}
-      </TabContent>
-    {/each}
+    {#if isLoaded}
+      {#each tabs as tab}
+        <TabContent>
+          {#if tab.pageType == 'LIST'}
+            <MtList bind:detail={listDetail} bind:filters bind:headers bind:rows bind:actions />
+          {:else if tab.pageType == 'INFO'}
+            <MtInfo bind:detail={infoDetail} bind:fields bind:form bind:actions bind:contents />
+          {/if}
+        </TabContent>
+      {/each}
+    {:else}
+      <p>Đang tải ...</p>
+    {/if}
   </svelte:fragment>
 </Tabs>

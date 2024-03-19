@@ -8,7 +8,7 @@
   } from 'carbon-components-svelte';
   import MtList from './list.js';
 
-  export let detail = {};
+  export let page = {};
   export let filters = [];
   export let headers = [];
   export let rows = [];
@@ -20,9 +20,11 @@
 
   onMount(async () => {
     try {
-      let result = self.processData(detail, headers, rows, actions);
+      let result = self.processData(page, headers, rows, actions);
       actionTop = result.actionTop;
       actionInline = result.actionInline;
+
+      filters = [] // #TODO
     }
     catch (e) {
       console.error(e)
@@ -32,11 +34,11 @@
 </script>
 
 <DataTable
-  title={detail.name}
+  title={page.name}
   headers={headers}
   rows={rows}
   size="medium"
-  >
+>
   <!-- Top Action -->
   <Toolbar>
     <ToolbarContent>

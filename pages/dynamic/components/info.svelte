@@ -1,7 +1,6 @@
 <script>
   import { onMount } from 'svelte';
   import {
-    Content,
     Form,
     TextInput, TextArea, NumberInput,
     Checkbox,
@@ -11,7 +10,7 @@
   import MtInfo from './info.js';
 
   export let self = new MtInfo();
-  export let detail = {};
+  export let page = {};
   export let fields = [];
   export let form = {};
   export let actions = [];
@@ -19,7 +18,7 @@
   
   onMount(async () => {
     try {
-      let result = self.processData(detail, fields, form, actions, contents);
+      let result = self.processData(page, fields, form, actions, contents);
       fields = result.fields;
     }
     catch (e) {
@@ -51,7 +50,7 @@
   <!-- ACTION -->
   <ButtonSet>
   {#each actions as action}
-    <Button on:click={() => self.onAction(action, detail, form)} >{action.name}</Button>
+    <Button on:click={() => self.onAction(action, page, form)} >{action.name}</Button>
   {/each}
   </ButtonSet>
 </Form>
