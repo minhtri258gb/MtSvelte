@@ -25,6 +25,21 @@
   let self = new MtTab();
 
   onMount(async () => {
+    
+    if (tabs.length > 0) {
+      let tab = tabs[0];
+      let pageType = tab.pageType;
+      if (pageType == 'LIST') {
+        listDetail = tab.detail;
+        filters = tab.filters;
+        headers = tab.headers;
+        rows = tab.rows;
+      }
+      else if (pageType == 'INFO') {
+        
+      }
+    }
+
     // let result = await mt.apiLoad(); // Call API
     // menus = result.menus;
     // detail = result.detail;
