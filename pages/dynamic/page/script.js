@@ -21,6 +21,7 @@ export default class Mt {
 
       // Call API Load menu
       let body = { ...this.args };
+      body.loadMenu = true;
       let response = await fetch(config.baseUrl+'/api/dynamic/getPage', {
         method:'POST',
         headers: {

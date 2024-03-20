@@ -12,59 +12,49 @@
   
   let isLoaded = false;
 
-  let listDetail = {};
-  let filters = [];
-  let headers = [];
-  let rows = [];
-
-  let infoDetail = {};
-  let fields = [];
-  let form = {};
-  
-  let actions = [];
-  let contents = [];
-
   let self = new MtTab();
 
   onMount(async () => {
-    
-    if (tabs.length > 0) {
-      let tab = tabs[0];
-      let pageType = tab.pageType;
-      if (pageType == 'LIST') {
-        listDetail = tab.detail;
-        filters = tab.filters;
-        headers = tab.headers;
-        rows = tab.rows;
-        actions = tab.actions;
-      }
-      else if (pageType == 'INFO') {
-        
-      }
-    }
-
-    // let result = await mt.apiLoad(); // Call API
-    // menus = result.menus;
-    // detail = result.detail;
-    // tabs = result.tabs;
-
     isLoaded = true;
   });
+
+  async function onChangeTab(tab, i) {
+    isLoaded = false;
+    let result = await self.apiloadSubTab(tab.pageType, tab.pageId);
+    tabs[i].page = result.page;
+    tabs[i].fields = result.fields;
+    tabs[i].form = result.form;
+    tabs[i].actions = result.actions;
+    tabs[i].contents = result.contents;
+    isLoaded = true;
+  }
 
 </script>
 
 <Tabs>
   {#each tabs as tab, i}
-    <Tab label={tab.name} on:click={() => self.onChangeTab(tab)} />
+    <Tab label={tab.name} on:click={() => onChangeTab(tab, i)} />
   {/each}
   <svelte:fragment slot="content">
     {#if isLoaded}
       {#each tabs as tab}
         <TabContent>
           {#if tab.pageType == 'LIST'}
-            <MtList bind:detail={listDetail} bind:filters bind:headers bind:rows bind:actions />
+            <MtList
+              bind:page={tab.page}
+              bind:filters={tab.filters}
+              bind:headers={tab.headers}
+              bind:rows={tab.rows}
+              bind:actions={tab.actions}
+            />
           {:else if tab.pageType == 'INFO'}
-            <MtInfo bind:detail={infoDetail} bind:fields bind:form bind:actions bind:contents />
+            <MtInfo
+              bind:page={tab.page}
+              bind:fields={tab.fields}
+              bind:form={tab.form}
+              bind:actions={tab.actions}
+              bind:contents={tab.contents}
+            />
           {/if}
         </TabContent>
       {/each}

@@ -18,8 +18,13 @@
   
   onMount(async () => {
     try {
-      let result = self.processData(page, fields, form, actions, contents);
-      fields = result.fields;
+      // console.log(page)
+      // console.log(fields)
+      // console.log(form)
+      // console.log(actions)
+      // console.log(contents)
+      // let result = self.processData(page, fields, form, actions, contents);
+      // fields = result.fields;
     }
     catch (e) {
       console.error(e)
