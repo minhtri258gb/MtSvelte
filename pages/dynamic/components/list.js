@@ -79,14 +79,6 @@ export default class MtList {
     result.actionTop = actionTop;
     result.actionInline = actionInline;
 
-    // Preprocess headers
-    if (headers.length > 0) { // Cảnh báo cấu hình lỗi
-      headers.unshift({ key: "stt", value: "STT" });
-      if (actionInline.length > 0) // Nếu có actionInline thì thêm cột
-        headers.push({ key: "overflow", empty: true });
-    }
-    result.headers = headers;
-
     // Preprocess rows
     for (let i in rows)
       rows[i].stt = +i+1;

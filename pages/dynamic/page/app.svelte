@@ -3,11 +3,11 @@
   import {
     Content,
   } from 'carbon-components-svelte';
-  import MtHeader from '@page/dynamic/components/header.svelte'
-  import MtMenu from '@page/dynamic/components/menu.svelte'
-  import MtList from '@page/dynamic/components/list.svelte'
-  import MtInfo from '@page/dynamic/components/info.svelte'
-  import MtTab from '@page/dynamic/components/tab.svelte'
+  import MtHeader from '@page/dynamic/components/header.svelte';
+  import MtMenu from '@page/dynamic/components/menu.svelte';
+  import MtList from '@page/dynamic/components/list.svelte';
+  import MtInfo from '@page/dynamic/components/info.svelte';
+  import MtTab from '@page/dynamic/components/tab.svelte';
   import Mt from './script.js';
 
   let self = new Mt();

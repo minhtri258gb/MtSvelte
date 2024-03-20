@@ -70,7 +70,7 @@ export default class MtInfo {
       for (let i in fields) {
         let field = fields[i];
 
-        if (field.type == 'SELECTBOX' && (field.content == null || result.contents[field.content] == null)) {
+        if (field.type == 'SELECTBOX' && (field.content == null || contents[field.content] == null)) {
           alert("Thiếu cấu hình content");
           console.log("[ERROR] field:", field)
           return result;
@@ -78,7 +78,7 @@ export default class MtInfo {
 
         // Mark content into field
         if (field.content != null) {
-          field.content = result.contents[field.content];
+          field.content = contents[field.content];
         }
       }
     }
