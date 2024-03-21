@@ -6,7 +6,7 @@ export default class Mt {
 
     // Add Config
     this.config = config;
-
+    
     // params on URL
     this.args = {};
     const urlParams = new URLSearchParams(window.location.search);

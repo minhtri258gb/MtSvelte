@@ -1,3 +1,4 @@
+import MtConfig from '@libs/config.js';
 import MtDynamic from '../dynamic';
 
 export default class MtInfo {
@@ -92,7 +93,7 @@ export default class MtInfo {
       // console.log("form:", form) // #DEBUG
       let body = { ...form };
       // console.log("body:", body) // #DEBUG
-      let response = await fetch(config.baseUrl+'api/dynamic/saveInfo', {
+      let response = await fetch(MtConfig.baseUrl+'/api/dynamic/saveInfo', {
         method:'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { optimizeImports, optimizeCss, icons } from 'carbon-preprocess-svelte';
 import { resolve } from 'path';
 
@@ -15,6 +15,7 @@ export default defineConfig({
 	],
 	root: 'pages',
 	publicDir: '../public',
+	envDir: '../',
 	build: {
 		rollupOptions: {
 			input: {
