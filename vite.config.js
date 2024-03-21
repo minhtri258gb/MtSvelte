@@ -22,6 +22,7 @@ export default defineConfig({
 				test: resolve(__dirname, 'pages/test/index.html'),
 				home: resolve(__dirname, 'pages/home/index.html'),
 				music: resolve(__dirname, 'pages/music/index.html'),
+				'dynamic/page': resolve(__dirname, 'pages/dynamic/page/index.html'),
 			},
 		},
 		// lib: {
