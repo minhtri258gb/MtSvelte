@@ -1,4 +1,14 @@
 var MtUtils = {
+  getArgs: function(url) {
+    let pos = url.indexOf('?');
+    if (pos >= 0)
+    url = url.substring(pos+1);
+    let args = {};
+    const urlParams = new URLSearchParams(url);
+    for (const [key, value] of urlParams.entries())
+      args[key] = value;
+    return args;
+  },
   fillVar: function(str, data) {
     while(true) {
       let posb = str.indexOf('{');

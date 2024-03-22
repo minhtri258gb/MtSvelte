@@ -1,3 +1,4 @@
+import MtUtils from '@libs/utils.js';
 import MtDynamic from '../dynamic';
 
 export default class MtList {
@@ -71,9 +72,9 @@ export default class MtList {
     let actionInline = [];
     for (let i in actions) {
       let action = actions[i];
-      if (action.type == 1)
+      if (action.pos == 1)
         actionTop.push(action);
-      else if (action.type == 2)
+      else if (action.pos == 2)
         actionInline.push(action);
     }
     result.actionTop = actionTop;
@@ -87,18 +88,30 @@ export default class MtList {
     return result;
   }
 
-  onAction(action, row) {
-    switch (action.funcType) {
+  async onAction(action, cbkAction, row) {
+    let cbkRequest = null;
+    switch (action.type) {
       case 'GO':
-        MtDynamic.doActionGo(action.funcData, row, this.args);
+        MtDynamic.doActionGo(action.data, row, this.args);
+        break;
+      case 'POPUP_GO':
+        let popupArgs = MtUtils.getArgs(action.data);
+        let popup = await MtDynamic.apiloadPage(popupArgs);
+        popup.isOpen = true;
+        popup.pageType = 'INFO';
+        popup.pageId = 1;
+        cbkRequest = { popup: popup };
         break;
       case 'BACK':
         MtDynamic.doActionBack();
         break;
       default:
-        console.log("Action: func_type invail:", action.funcType);
+        console.log("Action: type invail:", action.type);
         break;
     }
+
+    if (cbkRequest != null)
+      cbkAction(cbkRequest);
   }
 
 }

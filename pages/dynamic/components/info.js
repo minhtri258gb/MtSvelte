@@ -124,21 +124,24 @@ export default class MtInfo {
   }
 
   onAction(action, detail, form) {
-    switch (action.funcType) {
+    switch (action.type) {
       case 'GO':
-        MtDynamic.doActionGo(action.funcData, row, this.args);
+        MtDynamic.doActionGo(action.data, row, this.args);
         break;
       case 'BACK':
-        MtDynamic.doActionBack();
+        ;
         break;
       case 'SAVE':
-        form['_table_'] = detail.table; // Trường bổ sung cho form
-        this.apiDynamicInfoSave(form);
         break;
       default:
-        console.log("Action: func_type invail:", action.funcType);
+        console.log("Action: type invail:", action.type);
         break;
     }
+  }
+
+  onSave(detail, form) {
+    form['_table_'] = detail.table; // Trường bổ sung cho form
+    this.apiDynamicInfoSave(form);
   }
 
 }

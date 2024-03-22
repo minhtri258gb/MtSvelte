@@ -32,16 +32,8 @@
     isLoaded = false;
     if (tab.isLoaded == null) {
       let result = await self.apiloadSubTab(tab.pageType, tab.pageId);
-      tabs[i].page = result.page;
-      tabs[i].filters = result.filters;
-      tabs[i].headers = result.headers;
-      tabs[i].rows = result.rows;
-      tabs[i].fields = result.fields;
-      tabs[i].form = result.form;
-      tabs[i].tabs = result.tabs;
-      tabs[i].actions = result.actions;
-      tabs[i].contents = result.contents;
-      tabs[i].isLoaded = true;
+      result.isLoaded = true;
+      tabs[i] = Object.assign(tab, result);
       tab = tabs[i];
     }
     subPage = tab.page == null ? {} : tab.page;

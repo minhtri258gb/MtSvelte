@@ -8,6 +8,7 @@
     ButtonSet, Button,
   } from 'carbon-components-svelte';
   import MtInfo from './info.js';
+  import MtDynamic from '../dynamic';
 
   export let self = new MtInfo();
   export let page = {};
@@ -15,6 +16,7 @@
   export let form = {};
   export let actions = [];
   export let contents = [];
+  export let isPopup = false;
   
   onMount(async () => {
     try {
@@ -52,5 +54,9 @@
   {#each actions as action}
     <Button on:click={() => self.onAction(action, page, form)} >{action.name}</Button>
   {/each}
+  <Button on:click={() => self.onSave(page, form)} >Lưu</Button>
+  {#if !isPopup}
+    <Button on:click={() => MtDynamic.doActionBack()} >Quay lại</Button>
+  {/if}
   </ButtonSet>
 </Form>
