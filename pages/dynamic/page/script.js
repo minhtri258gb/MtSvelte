@@ -1,12 +1,9 @@
-import config from '@libs/config.js';
+import MtConfig from '@libs/config.js';
 
 export default class Mt {
 
   constructor() {
 
-    // Add Config
-    this.config = config;
-    
     // params on URL
     this.args = {};
     const urlParams = new URLSearchParams(window.location.search);
@@ -22,7 +19,7 @@ export default class Mt {
       // Call API Load menu
       let body = { ...this.args };
       body.loadMenu = true;
-      let response = await fetch(config.baseUrl+'/api/dynamic/getPage', {
+      let response = await fetch(MtConfig.baseUrl+'/api/dynamic/getPage', {
         method:'POST',
         headers: {
           'Content-Type': 'application/json',

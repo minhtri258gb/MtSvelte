@@ -23,50 +23,23 @@
   let isLoaded = false;
 
   // Data
+  let name = "Dynamic Page";
   let menus = [];
-
-  let page = { name: "Dynamic Page" };
-
-  let filters = [];
-  let headers = [];
-  let rows = [];
-
-  let fields = [];
-  let form = {};
-
-  let tabs = [];
-
-  let actions = [];
-  let contents = [];
+  let data = {}
   
   onMount(async () => {
     let res = await self.loadPage();
+    name = res.page.name;
     menus = res.menus;
-    if (type == 'LIST') {
-      page = res.page;
-      filters = res.fitlers;
-      headers = res.headers;
-      rows = res.rows;
-      actions = res.actions;
-    }
-    else if (type == 'INFO') {
-      page = res.page;
-      fields = res.fields;
-      form = res.form;
-      actions = res.actions;
-      contents = res.contents;
-    }
-    else if (type == 'TAB') {
-      page = res.page;
-      tabs = res.tabs;
-    }
+    delete res.menus;
+    data = res;
     isLoaded = true;
   });
 
 </script>
 
 <svelte:head>
-	<title>{page.name}</title>
+	<title>{name}</title>
 </svelte:head>
 
 <MtHeader bind:menus bind:isSideNavOpen bind:isOpen />
@@ -75,11 +48,11 @@
 <Content>
   {#if isLoaded}
     {#if type == 'LIST'}
-      <MtList bind:page bind:filters bind:headers bind:rows bind:actions />
+      <MtList bind:name bind:data />
     {:else if type == 'INFO'}
-      <MtInfo bind:page bind:fields bind:form bind:actions bind:contents />
+      <MtInfo bind:data />
     {:else if type == 'TAB'}
-      <MtTab bind:page bind:tabs />
+      <MtTab bind:data />
     {/if}
   {:else}
     <p>Đang tải ...</p>

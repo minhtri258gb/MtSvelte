@@ -95,11 +95,17 @@ export default class MtList {
         MtDynamic.doActionGo(action.data, row, this.args);
         break;
       case 'POPUP_GO':
-        let popupArgs = MtUtils.getArgs(action.data);
+        let popupArgs = Object.assign({}, this.args);
+        delete popupArgs.type;
+        delete popupArgs.id;
+        delete popupArgs.code;
+        let strArgs = MtUtils.fillVar(action.data, row);
+        popupArgs = Object.assign(popupArgs, MtUtils.getArgs(strArgs));
         let popup = await MtDynamic.apiloadPage(popupArgs);
         popup.isOpen = true;
-        popup.pageType = 'INFO';
-        popup.pageId = 1;
+        popup.pageType = popupArgs.type;
+        popup.pageId = popupArgs.id;
+        popup.pageCode = popupArgs.code;
         cbkRequest = { popup: popup };
         break;
       case 'BACK':

@@ -10,18 +10,15 @@
   import MtInfo from './info.js';
   import MtDynamic from '../dynamic';
 
-  export let self = new MtInfo();
-  export let page = {};
-  export let fields = [];
-  export let form = {};
-  export let actions = [];
-  export let contents = [];
+  export let data;
   export let isPopup = false;
+
+  let self = new MtInfo();
   
   onMount(async () => {
     try {
-      let result = self.processData(page, fields, form, actions, contents);
-      fields = result.fields;
+      let result = self.processData(data.page, data.fields, data.form, data.actions, data.contents);
+      data.fields = result.fields;
     }
     catch (e) {
       console.error(e)
@@ -32,17 +29,17 @@
 
 <Form >
   <!-- FIELD -->
-  {#each fields as field}
+  {#each data.fields as field}
   {#if field.type === "TEXT"}
-    <TextInput labelText={field.name} bind:value={form[field.code]} />
+    <TextInput labelText={field.name} bind:value={data.form[field.code]} />
   {:else if field.type === "TEXTAREA"}
-    <TextArea labelText={field.name} bind:value={form[field.code]} />
+    <TextArea labelText={field.name} bind:value={data.form[field.code]} />
   {:else if field.type === "NUMBER"}
-    <NumberInput label={field.name} bind:value={form[field.code]} allowEmpty />
+    <NumberInput label={field.name} bind:value={data.form[field.code]} allowEmpty />
   {:else if field.type === "CHECKBOX"}
     <Checkbox id={field.code} labelText={field.name} />
   {:else if field.type === "SELECTBOX"}
-    <Select labelText={field.name} bind:selected={form[field.code]}>
+    <Select labelText={field.name} bind:selected={data.form[field.code]}>
     {#each field.content as content}
       <SelectItem value={content.key} text={content.value} />
     {/each}
@@ -51,10 +48,10 @@
   {/each}
   <!-- ACTION -->
   <ButtonSet>
-  {#each actions as action}
-    <Button on:click={() => self.onAction(action, page, form)} >{action.name}</Button>
+  {#each data.actions as action}
+    <Button on:click={() => self.onAction(action, data.page, data.form)} >{action.name}</Button>
   {/each}
-  <Button on:click={() => self.onSave(page, form)} >Lưu</Button>
+  <Button on:click={() => self.onSave(data.page, data.form)} >Lưu</Button>
   {#if !isPopup}
     <Button on:click={() => MtDynamic.doActionBack()} >Quay lại</Button>
   {/if}
