@@ -7,24 +7,18 @@
   import MtInfo from '@page/dynamic/components/info.svelte'
   import MtTab from './tab.js';
 
-  export let page;
-  export let tabs;
+  export let data;
 
-  let subPage = {};
-  let subFilters = [];
-  let subHeaders = [];
-  let subRows = [];
-  let subFields = [];
-  let subForm = {};
-  let subTabs = [];
-  let subActions = [];
-  let subContents = [];
+  let tabs = [];
+
+  let tabdata = {}
   
   let isLoaded = false;
 
   let self = new MtTab();
 
   onMount(async () => {
+    tabs = data.tabs;
     onChangeTab(tabs[0], 0);
   });
 
@@ -36,15 +30,7 @@
       tabs[i] = Object.assign(tab, result);
       tab = tabs[i];
     }
-    subPage = tab.page == null ? {} : tab.page;
-    subFilters = tab.filters == null ? [] : tab.filters;
-    subHeaders = tab.headers == null ? [] : tab.headers;
-    subRows = tab.rows == null ? [] : tab.rows;
-    subFields = tab.fields == null ? [] : tab.fields;
-    subForm = tab.form == null ? {} : tab.form;
-    subTabs = tab.tabs == null ? [] : tab.tabs;
-    subActions = tab.actions == null ? [] : tab.actions;
-    subContents = tab.contents == null ? [] : tab.contents;
+    tabdata = tab;
     isLoaded = true;
   }
 
@@ -59,21 +45,9 @@
       <TabContent>
         {#if isLoaded}
           {#if tab.pageType == 'LIST'}
-            <MtList
-              bind:page={tab.page}
-              bind:filters={tab.filters}
-              bind:headers={tab.headers}
-              bind:rows={subRows}
-              bind:actions={subActions}
-            />
+            <MtList bind:name={tab.name} bind:data={tab} />
           {:else if tab.pageType == 'INFO'}
-            <MtInfo
-              bind:page={tab.page}
-              bind:fields={subFields}
-              bind:form={subForm}
-              bind:actions={subActions}
-              bind:contents={subContents}
-            />
+            <MtInfo bind:data={tab} />
           {/if}
         {:else}
           <p>Đang tải ...</p>
