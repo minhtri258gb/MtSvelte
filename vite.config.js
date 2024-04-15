@@ -1,5 +1,5 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import { optimizeImports, optimizeCss, icons } from 'carbon-preprocess-svelte';
 import { resolve } from 'path';
 
@@ -19,10 +19,11 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			input: {
-				main: resolve(__dirname, 'pages/index.html'),
-				test: resolve(__dirname, 'pages/test/index.html'),
-				home: resolve(__dirname, 'pages/home/index.html'),
-				music: resolve(__dirname, 'pages/music/index.html'),
+				'main': resolve(__dirname, 'pages/index.html'),
+				'test': resolve(__dirname, 'pages/test/index.html'),
+				'home': resolve(__dirname, 'pages/home/index.html'),
+				'music': resolve(__dirname, 'pages/music/index.html'),
+				'image': resolve(__dirname, 'pages/image/index.html'),
 				'dynamic/page': resolve(__dirname, 'pages/dynamic/page/index.html'),
 			},
 		},

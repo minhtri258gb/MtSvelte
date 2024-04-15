@@ -51,11 +51,11 @@
   <!-- ACTION -->
   <ButtonSet>
     {#each data.actions as action}
-      <Button on:click={() => self.onAction(action, data.page, data.form)} >{action.name}</Button>
+      <Button size="small" kind="tertiary" on:click={() => self.onAction(action, data.page, data.form)} >{action.name}</Button>
     {/each}
-    <Button on:click={() => self.onSave(data.page, data.form)} >Lưu</Button>
+      <Button size="small" kind="tertiary" on:click={() => self.onSave(data.page, data.form)} >Lưu</Button>
     {#if !isPopup}
-      <Button on:click={() => MtDynamic.doActionBack()} >Quay lại</Button>
+      <Button size="small" kind="tertiary" on:click={() => MtDynamic.doActionBack()} >Quay lại</Button>
     {/if}
   </ButtonSet>
 </Form>
