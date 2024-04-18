@@ -24,6 +24,7 @@ export default defineConfig({
 				'home': resolve(__dirname, 'pages/home/index.html'),
 				'music': resolve(__dirname, 'pages/music/index.html'),
 				'image': resolve(__dirname, 'pages/image/index.html'),
+				'calendar': resolve(__dirname, 'pages/calendar/index.html'),
 				'dynamic/page': resolve(__dirname, 'pages/dynamic/page/index.html'),
 			},
 		},

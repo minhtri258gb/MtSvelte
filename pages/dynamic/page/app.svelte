@@ -10,6 +10,7 @@
 	import MtTab from '@page/dynamic/components/tab.svelte';
 	import Mt from './script.js';
 
+	
 	let self = new Mt();
 
 	// Page

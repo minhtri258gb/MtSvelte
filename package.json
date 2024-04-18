@@ -13,6 +13,11 @@
   },
   "devDependencies": {
     "@carbon/charts-svelte": "^1.15.3",
+    "@event-calendar/core": "^2.6.1",
+    "@event-calendar/day-grid": "^2.6.1",
+    "@event-calendar/list": "^2.6.1",
+    "@event-calendar/resource-time-grid": "^2.6.1",
+    "@event-calendar/time-grid": "^2.6.1",
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "autoprefixer": "^10.4.16",
     "carbon-components-svelte": "^0.84.0",
