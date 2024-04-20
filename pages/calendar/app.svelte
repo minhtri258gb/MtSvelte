@@ -5,12 +5,18 @@
 	} from 'carbon-components-svelte';
 	import Calendar from '@event-calendar/core';
 	import '@event-calendar/core/index.css';
+	import MtConfig from '@libs/config.js';
 	import Mt from './script.js';
 
 
 	let self = new Mt();
+	let ec;
 	let plugins = self.plugins;
 	let options = self.options;
+
+	onMount(async () => {
+		self.load();
+	});
 	
 </script>
 <header class="row">
@@ -21,7 +27,7 @@
 	</button>
 </header>
 <div>
-	<Calendar {plugins} {options} />
+	<Calendar bind:this={ec} {plugins} {options} />
 </div>
 
 <style>
