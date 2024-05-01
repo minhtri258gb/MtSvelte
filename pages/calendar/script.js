@@ -3,6 +3,7 @@ import TimeGrid from '@event-calendar/time-grid';
 import dayGridMonth from '@event-calendar/day-grid';
 import listWeek from '@event-calendar/list';
 import resourceTimeGridWeek from '@event-calendar/resource-time-grid';
+import Interaction from '@event-calendar/interaction';
 
 export default class Mt {
 
@@ -38,7 +39,7 @@ export default class Mt {
 	}
 
 	constructor() {
-		this.plugins = [TimeGrid, dayGridMonth, listWeek, resourceTimeGridWeek];
+		this.plugins = [TimeGrid, dayGridMonth, listWeek, resourceTimeGridWeek, Interaction];
 		this.options = {
 			view: 'dayGridMonth',
 			headerToolbar: {
@@ -79,9 +80,9 @@ export default class Mt {
 			},
 			firstDay: 1,
 			// height: '100%',
-			// eventClick: function(info) {
-			// 	console.log("eventClick: ", info);
-			// },
+			eventClick: function(info) {
+				console.log("eventClick: ", info);
+			},
 			// dateClick: function(info) {
 			// 	console.log("dateClick: ", info);
 			// },
@@ -91,16 +92,25 @@ export default class Mt {
 		};
 	}
 
-	async load() {
-		let month = 4;
-		let response = await fetch(MtConfig.baseUrl+'/calendar/get?type=month&month='+month, {
+	async load(ec) {
+		let curDate = new Date();
+		let month = curDate.getMonth() + 1;
+		let year = curDate.getFullYear();
+		let response = await fetch(MtConfig.baseUrl+'/api/calendar/get?type=month&year='+year+'&month='+month, {
 			method: 'GET',
 		});
 		let res = await response.json();
+		for (let i in res) {
+			let event = res[i];
+			let dateStr = `${event.year}-${this.pad(event.month)}-${this.pad(event.day)} 00:00`;
+			event.start = `${dateStr} 00:00`;
+			event.end = `${dateStr} 23:59`;
+			event.resourceId = 1;
+			event.title = event.name;
+			event.color = "#B29DD9";
 
-		console.log(res);
-
-		ec.addEvent({start: '2024-04-01 00:00', end: '2024-04-01 21:00', resourceId: 2, title: "ABCCC", color: "#B29DD9"});
+			ec.addEvent(event);
+		}
 	}
 
 	// LUNAL
@@ -258,5 +268,10 @@ export default class Mt {
 		}
 
 		return [lunarDay, lunarMonth, lunarYear, isleap];
+	}
+
+	// Utils
+	pad(num) {
+		return (num < 10 ? '0' : '') + num;
 	}
 }

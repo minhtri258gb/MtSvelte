@@ -9,6 +9,7 @@
     "preview": "npx vite preview"
   },
   "dependencies": {
+    "@event-calendar/interaction": "^2.6.1",
     "@urql/svelte": "^4.0.4"
   },
   "devDependencies": {
