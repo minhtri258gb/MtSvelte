@@ -1,24 +1,14 @@
 import MtConfig from '@libs/config.js';
-import TimeGrid from '@event-calendar/time-grid';
-import dayGridMonth from '@event-calendar/day-grid';
-import listWeek from '@event-calendar/list';
-import resourceTimeGridWeek from '@event-calendar/resource-time-grid';
-import Interaction from '@event-calendar/interaction';
 
 export default class Mt {
 
-	_pad(num) {
-		let norm = Math.floor(Math.abs(num));
-		return (norm < 10 ? '0' : '') + norm;
-	}
-	
 	createEvents() {
 		let days = [];
 		for (let i = 0; i < 7; ++i) {
 			let day = new Date();
 			let diff = i - day.getDay();
 			day.setDate(day.getDate() + diff);
-			days[i] = day.getFullYear() + "-" + this._pad(day.getMonth()+1) + "-" + this._pad(day.getDate());
+			days[i] = day.getFullYear() + "-" + this.pad(day.getMonth()+1) + "-" + this.pad(day.getDate());
 		}
 
 		return [];
@@ -38,79 +28,29 @@ export default class Mt {
 		// ];
 	}
 
-	constructor() {
-		this.plugins = [TimeGrid, dayGridMonth, listWeek, resourceTimeGridWeek, Interaction];
-		this.options = {
-			view: 'dayGridMonth',
-			headerToolbar: {
-				start: 'prev,next today',
-				center: 'title',
-				end: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek resourceTimeGridWeek'
-			},
-			buttonText: function (texts) {
-				texts.close = 'Đóng';
-				texts.today = 'Hôm nay';
-				texts.dayGridMonth = 'Tháng';
-				texts.listDay = 'Danh sách';
-				texts.listMonth = 'Danh sách';
-				texts.listWeek = 'Danh sách';
-				texts.listYear = 'Danh sách';
-				texts.resourceTimeGridDay = 'Ngày';
-				texts.resourceTimeGridWeek = 'Tuần';
-				texts.timeGridDay = 'Ngày';
-				texts.timeGridWeek = 'Tuần';
-				texts.resourceTimeGridWeek = 'resources';
-				return texts;
-			},
-			resources: [
-				{id: 1, title: 'Resource A'},
-				{id: 2, title: 'Resource B'}
-			],
-			scrollTime: '09:00:00',
-			events: this.createEvents(),
-			views: {
-				timeGridWeek: {pointer: true},
-				resourceTimeGridWeek: {pointer: true}
-			},
-			dayMaxEvents: true,
-			nowIndicator: true,
-			selectable: true,
-			titleFormat: function(startDate, endDate) {
-				return "Tháng " + (startDate.getMonth()+1) + " năm " + startDate.getFullYear();
-			},
-			firstDay: 1,
-			// height: '100%',
-			eventClick: function(info) {
-				console.log("eventClick: ", info);
-			},
-			// dateClick: function(info) {
-			// 	console.log("dateClick: ", info);
-			// },
-			loading: function(isLoading) {
-				console.log("isLoading: ", isLoading);
-			}
-		};
-	}
+	async getListEvent(startDate, endDate) {
 
-	async load(ec) {
-		let curDate = new Date();
-		let month = curDate.getMonth() + 1;
-		let year = curDate.getFullYear();
-		let response = await fetch(MtConfig.baseUrl+'/api/calendar/get?type=month&year='+year+'&month='+month, {
+		// Call API
+		let params = new URLSearchParams();
+		params.set('start', this.date2str(startDate));
+		params.set('end', this.date2str(endDate));
+		let response = await fetch(MtConfig.baseUrl+'/api/calendar/get?' + params.toString(), {
 			method: 'GET',
 		});
-		let res = await response.json();
-		for (let i in res) {
-			let event = res[i];
-			let dateStr = `${event.year}-${this.pad(event.month)}-${this.pad(event.day)} 00:00`;
-			event.start = `${dateStr} 00:00`;
-			event.end = `${dateStr} 23:59`;
+		let lstEvent = await response.json();
+
+		// Process data
+		for (let i in lstEvent) {
+			let event = lstEvent[i];
+			let dateStr = `${event.year}-${this.pad(event.month)}-${this.pad(event.day)}`;
+			event.start = dateStr;//`${dateStr} 00:00`;
+			event.end = dateStr;//`${dateStr} 23:59`;
 			event.resourceId = 1;
 			event.title = event.name;
 			event.color = "#B29DD9";
-
-			ec.addEvent(event);
 		}
+
+		return lstEvent;
 	}
 
 	// LUNAL
@@ -273,5 +213,8 @@ export default class Mt {
 	// Utils
 	pad(num) {
 		return (num < 10 ? '0' : '') + num;
+	}
+	date2str(date) {
+		return `${this.pad(date.getDate())}/${this.pad(date.getMonth() + 1)}/${date.getFullYear()}`
 	}
 }
